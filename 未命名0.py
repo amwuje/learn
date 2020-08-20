@@ -29,3 +29,6 @@ if __name__ == "__main__":
     xml_path = get_manifest_xml_path()
     out_path = get_out_path( xml_path )
     convert_xml_to_txt( xml_path, out_path )
+
+
+    

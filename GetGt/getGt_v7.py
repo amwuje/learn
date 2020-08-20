@@ -177,8 +177,6 @@ def parseStp():
 
 parseStp()
 # print(parseStp())
-
-
 # fo = open('test.txt',"w")
 # fo.write(str(parseStp()))
 # fo.close()

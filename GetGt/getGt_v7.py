@@ -180,8 +180,6 @@ parseStp()
 # fo = open('test.txt',"w")
 # fo.write(str(parseStp()))
 # fo.close()
-
-
 # fo = open('test.txt',"w")
 # fo.write(str(parseStp()))
 # fo.close()

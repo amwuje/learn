@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Aug 20 15:57:00 2020
+
+@author: huang
+"""
+
 import requests
 from lxml import etree
 import os
@@ -29,7 +36,9 @@ img_alt = html.xpath('//ul[@class="clearfix"]/li/a/img/@alt')
 
 for src, name in zip(img_src, img_alt):
     img_content = requests.get(src, headers=headers).content
+    # print(img_content)
     img_name = name + '.jpg'
     with open(path + img_name, 'wb') as f:   # 图片保存到本地
-    	print(f"正在为您下载图片：{img_name}")
+        print(f"正在为您下载图片：{img_name}")
         f.write(img_content)
+

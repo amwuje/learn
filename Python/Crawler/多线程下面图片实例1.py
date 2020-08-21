@@ -5,13 +5,13 @@ Created on Thu Aug 20 15:57:00 2020
 @author: huang
 """
 
-import requests
-from lxml import etree
 import os
-import time
 import random
 import threading
+import time
 from queue import Queue
+import requests
+from lxml import etree
 
 
 class AiXjj():
@@ -170,4 +170,3 @@ class AiXjj():
 if __name__ == '__main__':
     aixjj = AiXjj()
     aixjj.run()
-

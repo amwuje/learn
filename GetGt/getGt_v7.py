@@ -10,11 +10,19 @@
 import re
 import os
 import xlwt
+import logging
+import time
 import pandas as pd
 from pandas.core.frame import DataFrame
 
+# 调试定义logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s 【 %(process)d 】 %(processName)s %(message)s"
+)
 
 def dataWrite(file_path, datas):
+    print(file_path)
     f = xlwt.Workbook()
     sheet1 = f.add_sheet(u'sheet1',cell_overwrite_ok=True) #创建sheet    
     # 将数据写入第 i 行，第 j 列
@@ -80,8 +88,8 @@ def getP6gt(tt1,tt2,filename):
     E164ES = E164[1::2]   
     E214GT = E214[::2]
     E214ES = E214[1::2] 
-    print(len(E164GT),len(E164ES))
-    print(len(E214GT),len(E214ES))
+    # print(len(E164GT),len(E164ES))
+    # print(len(E214GT),len(E214ES))
     # print(E164GT)
     E164List = {'TT':tt1,'GT':E164GT,'ES':E164ES}
     E214List = {'TT':tt2,'GT':E214GT,'ES':E214ES}
@@ -131,14 +139,15 @@ def getP12gt(tt1,tt2,filename):
     E164ES = E164[1::2]   
     E214GT = E214[::2]
     E214ES = E214[1::2] 
-    print(len(E164GT),len(E164ES))
-    print(len(E214GT),len(E214ES))
+    # print(len(E164GT),len(E164ES))
+    # print(len(E214GT),len(E214ES))
     E164List = {'TT':tt1,'GT':E164GT,'ES':E164ES}
     E214List = {'TT':tt2,'GT':E214GT,'ES':E214ES}
     # List = dict(E164List,**E214List)
     # print(List)
     data1 = DataFrame(E164List)
     data2 = DataFrame(E214List)
+    # print(filename)
     listWrite(filename,data1,data2)
     # E164List = dict(zip(E164GT,E164ES))
     # E214List = dict(zip(E214GT,E214ES))
@@ -150,32 +159,45 @@ def listWrite (filename,data1,data2):
     if(filename.upper().find("P6") != -1):
         DataFrame(data1).to_excel(writer,sheet_name='P6_E164')
         DataFrame(data2).to_excel(writer,sheet_name='P6_E214')
-        
+        logging.info(f"花费时间：{time.time()-start}秒")
     elif(filename.upper().find("P12") != -1):
         DataFrame(data1).to_excel(writer,sheet_name='P12_E164')
         DataFrame(data2).to_excel(writer,sheet_name='P12_E214')
+        logging.info(f"花费时间：{time.time()-start}秒")
     
 
 def parseStp():
     # global outname
     global writer
-    writer = pd.ExcelWriter('outname.xlsx')
+    global start
+    writer = pd.ExcelWriter(path + '/' + 'outname.xlsx')
     reg0 = re.compile('(.*[^\.]+).*\.txt$', re.I)
-    for item in os.listdir():
+    for item in os.listdir(path):
         filename = item.strip()
         # print("the filename is:%s\n" % filename)
         ret2 = reg0.search(filename)        
         if(ret2):
             if(filename.upper().find("P6") != -1):
                 # outname =  ret2.group(1)
-                getP6gt('E164_INTAL_TT0','E214_INTAL_TT0',filename)               
+                print(time.ctime() + ' 正在分析P6版本GT数据……')
+                start = time.time()
+                getP6gt('E164_INTAL_TT0','E214_INTAL_TT0',path + '/' + filename)               
             elif(filename.upper().find("P12") != -1):
                 # outname =  ret2.group(1) 
-                getP12gt('E164_INTAL_TT0','E214_INTAL_TT0',filename)                             
+                print(time.ctime() + ' 正在分析P12版本GT数据……')
+                start = time.time()
+                getP12gt('E164_INTAL_TT0','E214_INTAL_TT0',path + '/' + filename)
     writer.save()
     return 
 
-parseStp()
+# parseStp()
+if __name__ == '__main__':
+    start = time.time()
+    path = os.path.split(os.path.realpath(__file__))[0]  # 获取脚本所在目录
+    aixjparseStpj = parseStp()
+    parseStp
+    logging.info(f"总花费时间：{time.time()-start}秒")
+
 # print(parseStp())
 # fo = open('test.txt',"w")
 # fo.write(str(parseStp()))

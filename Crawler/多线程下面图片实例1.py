@@ -129,7 +129,7 @@ class AiXjj():
     def save_pic(self):
         while True:
             url, title = self.pic_title.get()
-            base_dir = 'D:\download' + '\{}'.format(title)
+            base_dir = 'D:\pydown\download' + '\{}'.format(title)
             # 如果目录不存在，则新建
             if not os.path.exists(base_dir):
                 os.makedirs(base_dir)

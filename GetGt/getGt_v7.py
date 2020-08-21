@@ -183,7 +183,3 @@ parseStp()
 
 
 
-'thosfoaf'
-
-
-

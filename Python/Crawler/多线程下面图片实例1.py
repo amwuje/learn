@@ -160,10 +160,8 @@ class AiXjj():
         for thread in thread_list:
             thread.setDaemon(True)  # 把子线程设置为守护线程，该线程不重要，主线程结束，子线程结束
             thread.start()
-
         for q in [self.page_urls, self.xuanji_urls, self.pic_title]:
             q.join()  # 让主线程等待堵塞，等待队列的任务完成之后再完成
-
         print('主线程结束')
 
 

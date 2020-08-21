@@ -45,6 +45,7 @@ def main (ctx):
     p = ctx.Pool(5)
     for url in url_lst:
         p.apply_async(get_url, args=(url,), callback=call)
+        # p.apply(get_url, args=(url,))
     p.close()
     p.join()
     logging.info(f"总花费时间：{time.time()-start}秒")

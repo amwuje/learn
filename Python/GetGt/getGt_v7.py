@@ -125,7 +125,7 @@ def getP12gt(tt1,tt2,filename):
                     E164.append(i)
         if wflag2 == True:
             KK = list(line)
-            if len(K)>1:                    # 去除文本中的空行
+            if len(KK)>1:                    # 去除文本中的空行
                 for i in KK :               # 写入需要内容
                     E214.append(i)
     E164 = str("".join(E164))        # 合并列表元素并且list转化成str
@@ -157,6 +157,7 @@ def getP12gt(tt1,tt2,filename):
     return
 
 def listWrite (filename,data1,data2):
+    # print(filename)
     if(filename.upper().find("P6") != -1):
         DataFrame(data1).to_excel(writer,sheet_name='P6_E164')
         DataFrame(data2).to_excel(writer,sheet_name='P6_E214')
@@ -169,17 +170,18 @@ def listWrite (filename,data1,data2):
 
 def parseStp():
     # global outname
-    global writer
     global start
-    writer = pd.ExcelWriter(path + '/' + 'outname.xlsx')
     reg0 = re.compile('(.*[^\.]+).*\.txt$', re.I)
+    os.chdir(path)
     for item in os.listdir(path):
         filename = item.strip()
         # print("the filename is:%s\n" % filename)
         ret2 = reg0.search(filename)
+        # print(ret2)
         if(ret2):
             if(filename.upper().find("P6") != -1):
                 # outname =  ret2.group(1)
+                print(filename)
                 print(time.ctime() + ' 正在分析P6版本GT数据……')
                 start = time.time()
                 getP6gt('E164_INTAL_TT0','E214_INTAL_TT0',path + '/' + filename)
@@ -187,16 +189,20 @@ def parseStp():
                 # outname =  ret2.group(1)
                 print(time.ctime() + ' 正在分析P12版本GT数据……')
                 start = time.time()
-                getP12gt('E164_INTAL_TT0','E214_INTAL_TT0',path + '/' + filename)
-    writer.save()
+                getP12gt('E164_INTAL_TT0','E214_INTAL_TT0', path + '/' + filename)
+    # writer.save()
     return
 
 # parseStp()
 if __name__ == '__main__':
+    global writer
+    global path
     start1 = time.time()
     path = os.path.split(os.path.realpath(__file__))[0]  # 获取脚本所在目录
+    writer = pd.ExcelWriter(path + '/' + 'outname.xlsx')
     # parseStp = parseStp()
     parseStp()
+    writer.save()
     logging.info(f"总花费时间：{time.time()-start1}秒")
 
 # print(parseStp())

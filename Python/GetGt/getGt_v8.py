@@ -101,7 +101,7 @@ def getP6gt(tt1,tt2,filename):
     wyName = filename.split('_')[0]
     DataFrame(E164List).to_excel(writer, sheet_name='' + wyName + '_E164')
     DataFrame(E214List).to_excel(writer, sheet_name='' + wyName + '_E214')
-    logging.info(f"花费时间：{time.time()-start}秒")
+    logging.info(f'花费时间：{float(" % .2f" % (time.time()-start))}秒')
     fi.close()
     return
 
@@ -151,7 +151,7 @@ def getP12gt(tt1,tt2,filename):
     wyName = filename.split('_')[0]
     DataFrame(E164List).to_excel(writer, sheet_name='' + wyName + '_E164')
     DataFrame(E214List).to_excel(writer, sheet_name='' + wyName + '_E214')
-    logging.info(f"花费时间：{time.time()-start}秒")
+    logging.info(f'花费时间：{float(" % .2f" % (time.time()-start))}秒')
     fi.close()
     return
 
@@ -162,18 +162,18 @@ def parseStp():
     os.chdir(path)
     for item in os.listdir(path):
         filename = item.strip()
-        # print("the filename is:%s\n" % filename)
+        # print("the filename is:%s\n" % filename.split('_')[0])
         ret2 = reg0.search(filename)
         # print(ret2)
         if(ret2):
             if(filename.upper().find("P6") != -1):
                 # print(filename.split('.')[0])
-                print(time.ctime() + ' 正在分析P6版本GT数据……')
+                print(time.ctime() + ' 正在分析' +filename.split('_')[0] + '的GT数据……')
                 start = time.time()
                 getP6gt('E164_INTAL_TT0','E214_INTAL_TT0',filename)
             elif(filename.upper().find("P12") != -1):
                 # outname =  ret2.group(1)
-                print(time.ctime() + ' 正在分析P12版本GT数据……')
+                print(time.ctime() + ' 正在分析' +filename.split('_')[0] + '的GT数据……')
                 start = time.time()
                 getP12gt('E164_INTAL_TT0','E214_INTAL_TT0', filename)
     # writer.save()
@@ -186,10 +186,9 @@ if __name__ == '__main__':
     start1 = time.time()
     path = os.path.split(os.path.realpath(__file__))[0]  # 获取脚本所在目录
     writer = pd.ExcelWriter(path + '/' + 'outname.xlsx')
-    # parseStp = parseStp()
     parseStp()
     writer.save()
-    logging.info(f"总花费时间：{time.time()-start1}秒")
+    logging.info(f'总花费时间：{float(" % .2f" % (time.time()-start1))}秒')
 
 # print(parseStp())
 # fo = open('test.txt',"w")

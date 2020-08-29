@@ -10,6 +10,8 @@ import pymysql
 from sqlalchemy import create_engine
 from urllib.parse import urlencode  # 编码 URL 字符串
 
+# https: // s.askci.com/stock/a/0-0?reportTime = 2020-03-31 & pageNum = 186  # QueryCondition
+
 start_time = time.time()  #计算程序运行时间
 def get_one_page(i):
     try:
@@ -17,7 +19,7 @@ def get_one_page(i):
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
         }
         paras = {
-        'reportTime': '2017-12-31',
+        'reportTime': '2020-03-31',
         #可以改报告日期，比如2018-6-30获得的就是该季度的信息
         'pageNum': i   #页码
         }
@@ -39,20 +41,22 @@ def parse_one_page(html):
 
 def generate_mysql():
     conn = pymysql.connect(
-        host='localhost',
+        host='172.35.114.85',
         user='root',
-        password='******',
+        password='123456',
         port=3306,
         charset = 'utf8',  
         db = 'wade')
     cursor = conn.cursor()
 
     sql = 'CREATE TABLE IF NOT EXISTS listed_company (serial_number INT(20) NOT NULL,stock_code INT(20) ,stock_abbre VARCHAR(20) ,company_name VARCHAR(20) ,province VARCHAR(20) ,city VARCHAR(20) ,main_bussiness_income VARCHAR(20) ,net_profit VARCHAR(20) ,employees INT(20) ,listing_date DATETIME(0) ,zhaogushu VARCHAR(20) ,financial_report VARCHAR(20) , industry_classification VARCHAR(20) ,industry_type VARCHAR(100) ,main_business VARCHAR(200) ,PRIMARY KEY (serial_number))'
+    print(sql)
     cursor.execute(sql)
     conn.close()
 
 def write_to_sql(tbl, db = 'wade'):
-    engine = create_engine('mysql+pymysql://root:******@localhost:3306/{0}?charset=utf8'.format(db))
+    engine = create_engine(
+        'mysql+pymysql://root:123456@172.35.114.85:3306/{0}?charset=utf8 '.format(db))
     try:
         tbl.to_sql('listed_company2',con = engine,if_exists='append',index=False)
         # append表示在原有表基础上增加，但该表要有表头
@@ -74,8 +78,9 @@ if __name__ == '__main__':
 
 # 多进程
 from multiprocessing import Pool
+from requests.exceptions import RequestException
 if __name__ == '__main__':
     pool = Pool(4)
-    pool.map(main, [i for i in range(1,178)])  #共有178页
+    pool.map(main, [i for i in range(1,3)])  #共有178页
     endtime = time.time()-start_time
     print('程序运行了%.2f秒' %(time.time()-start_time))

@@ -31,11 +31,11 @@ def createtable(wyName):
     # 打开数据库连接
     # 用户名:root, 密码:123456.,用户名和密码需要改成你自己的mysql用户名和密码，并且要先创建数据库test，并在test数据库中创建好网元gt表
     db = pymysql.connect(
-        host="172.35.114.85",
+        host="172.41.11.76",
         user="root",
         passwd="123456",
         port=3306,
-        db="test",
+        db="GT",
         charset='utf8',
         cursorclass=pymysql.cursors.DictCursor)
     print('连接上了!')
@@ -54,13 +54,14 @@ def createtable(wyName):
 def insert(db,cursor, wyName, values):
     sql = "INSERT INTO " + wyName +"(TT,GT,ES) VALUES (%s, %s,  %s)"
     try:
+        print(sql, values)
         cursor.execute(sql, values)
         db.commit()
         print('插入数据成功')
     except:
         db.rollback()
         print("插入数据失败")
-
+    return
 
 
 def replaceRe(fi):
@@ -79,11 +80,11 @@ def replaceRe(fi):
 
 def getP6gt(tt1,tt2,filename):
     db = pymysql.connect(
-        host="172.35.114.85",
+        host="172.41.11.76",
         user="root",
         passwd="123456",
         port=3306,
-        db="test",
+        db="GT",
         charset='utf8',
         cursorclass=pymysql.cursors.DictCursor)
     cursor = db.cursor()
@@ -158,11 +159,11 @@ def getP6gt(tt1,tt2,filename):
 
 def getP12gt(tt1,tt2,filename):
     db = pymysql.connect(
-        host="172.35.114.85",
+        host="172.41.11.76",
         user="root",
         passwd="123456",
         port=3306,
-        db="test",
+        db="GT",
         charset='utf8',
         cursorclass=pymysql.cursors.DictCursor)
     cursor = db.cursor()

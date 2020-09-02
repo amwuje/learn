@@ -13,7 +13,7 @@ def connectdb():
         user="root",
         passwd="123456",
         port=3306,
-        db="TESTDB",
+        db="test",
         charset='utf8',
         cursorclass=pymysql.cursors.DictCursor)
     print('连接上了!')
@@ -43,13 +43,15 @@ def insertdb(db):
                 ('005', 'HP', 70),
                 ('006', 'YF', 66),
                 ('007', 'TEST', 100)'''
-    # sql = 'INSERT INTO Student(ID, Name, Grade)VALUES ("%s", "%s", "%d")" % ("001", "HP", 60)'
+    # sql = "INSERT INTO  Student(ID, Name, Grade) VALUES ('001', 'HP', 60)"
+    # dql = 'INSERT INTO Student(ID, Name, Grade)VALUES ("%s", "%s", "%d")" %("001", "HP", 60)'
     print(sql)
     try:
         # 执行sql语句
         cursor.execute(sql)
         # 提交到数据库执行
         db.commit()
+        print('插入数据成功!')
     except:
     # Rollback in case there is any error
         print('插入数据失败!')
@@ -100,7 +102,7 @@ def updatedb(db):
     # 使用cursor()方法获取操作游标 
     cursor = db.cursor()
     # SQL 更新语句
-    sql = "UPDATE Student SET Grade = Grade + 3 WHERE ID = '%s'" % ('003')
+    sql = "UPDATE Student SET Grade = Grade + 3 WHERE ID = '%s'" % ('001')
     try:
         # 执行SQL语句
         cursor.execute(sql)

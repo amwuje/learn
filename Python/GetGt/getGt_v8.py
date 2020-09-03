@@ -14,6 +14,7 @@ import os
 import xlwt
 import logging
 import time
+import datetime
 import pandas as pd
 from pandas.core.frame import DataFrame
 from tornado.autoreload import start
@@ -179,16 +180,22 @@ def parseStp():
     # writer.save()
     return
 
-# parseStp()
+
+def main():
+    parseStp()
+
+
 if __name__ == '__main__':
     global writer
     global path
     start1 = time.time()
     path = os.path.split(os.path.realpath(__file__))[0]  # 获取脚本所在目录
-    writer = pd.ExcelWriter(path + '/' + 'outname.xlsx')
-    parseStp()
+    now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    writer = pd.ExcelWriter(path + '/' + 'outname_' + now + '.xlsx')
+    main()
     writer.save()
     logging.info(f'总花费时间：{float(" % .2f" % (time.time()-start1))}秒')
+
 
 # print(parseStp())
 # fo = open('test.txt',"w")

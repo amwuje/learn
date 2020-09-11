@@ -10,7 +10,7 @@ from lxml import etree
 import os
 
 # 设置保存路径
-path = 'D:\pydown\picture_1\ '
+path = 'D:\pydown\picture_2\ '
 # 如果目录不存在，则新建
 if not os.path.exists(path):
     os.makedirs(path)

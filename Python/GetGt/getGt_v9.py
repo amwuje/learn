@@ -261,9 +261,9 @@ if __name__ == '__main__':
     global path
     start1 = time.time()
     path = os.path.split(os.path.realpath(__file__))[0]  # 获取脚本所在目录
-    writer = pd.ExcelWriter(path + '/' + 'outname.xlsx')
+    # writer = pd.ExcelWriter(path + '/' + 'outname.xlsx')
     parseStp()
-    writer.save()
+    # writer.save()
     logging.info(f'总花费时间：{float(" % .2f" % (time.time()-start1))}秒')
 
 # print(parseStp())

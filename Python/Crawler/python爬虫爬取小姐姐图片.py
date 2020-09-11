@@ -11,8 +11,7 @@ import os  # os
 
 root = 'D://pydown//img//'  # 配置存储路径
 
-def (aa,bb):
-    for page in range(1, 5):  # 配置爬取页码，我这边配置的是5个人的图片
+for page in range(1, 5):  # 配置爬取页码，我这边配置的是5个人的图片
     for p in range(1, 20):  # 配置爬取每个人多少张的参数，我这边配置的是每个人20张
         url = 'http://www.win4000.com/meinv'+str(page)+'_'+str(p)+'.html'
         r = requests.get(url)  # 使用requests中的get方法获取整个网页
@@ -42,10 +41,3 @@ def (aa,bb):
                 except Exception as e:
                     print("爬取失败:" + str(e))
 
-def (aa,bb)
-
-
-
-if __name__ == '__main__':
-    getUrl = getUrl()
-    getUrl

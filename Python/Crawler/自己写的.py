@@ -11,18 +11,20 @@ import time
 import logging
 import threading
 from lxml import etree
+from multiprocessing import Pool
 
 # 调试定义logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s 【 %(process)d 】 %(processName)s %(message)s"
 )
+
 headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
 }  # 加入请求头
-url = 'http://www.win4000.com/'
-
-root = 'D://pydown//win4000//'
+url = 'http://www.win4000.com/'  # 网站根地址
+interval = 0.1  # 爬取图片的间隔时间
+root = 'D://pydown//win4000//'  # 总路径
 if not os.path.exists(root):
     os.mkdir(root)
 
@@ -39,6 +41,8 @@ def get_down(imagr_url, file_name):
             print("文件已存在")
     except Exception as e:
             print("爬取失败:" + str(e))   
+
+
 
 def get_img(inp,title_list, url_list):
     for title, url in zip(title_list, url_list):
@@ -64,12 +68,42 @@ def get_img(inp,title_list, url_list):
                 if r.status_code != 404:
                     html2 = etree.HTML(r.text)
                     src = html2.xpath(
-                        r"//div[@class='paper-down']//a/@href") # 获得图片地址
+                    r"//div[@class='paper-down']//a/@href") # 获得图片地址
                     # src = src[0]
                     imagr_url = src[0].replace('?down', '')
                     file_name = path + imagr_url.split('/')[-1]
                     get_down(imagr_url, file_name)
+                    # time.sleep(interval)
 
+
+def image_down(pages, url, inp):
+    # for page in range(0, 1):
+    url = 'http://www.win4000.com/mt/' + \
+        inp + '_' + str(pages)+'.html'
+    print(url)
+    r = requests.get(url, headers)
+    r.encoding = 'utf-8'  # 转换编码
+    if r.status_code != 404:
+        html2 = etree.HTML(r.text)
+        title_list = html2.xpath(
+            r"//div[@class='w1180 clearfix']//div[@class='Left_bar']//div[@class='tab_box']//ul[@class='clearfix']/li//a/img/@title")  # 获得分页pages
+        # print(title_list)
+        url_list = html2.xpath(
+            r"//div[@class='w1180 clearfix']//div[@class='Left_bar']//div[@class='tab_box']//ul[@class='clearfix']/li//a/@href")  # 获得分页pages
+        # print(url_list)
+    get_img(inp, title_list, url_list)
+
+
+
+def pool_down(pages, url, inp):  # 线程下载
+    #  创建一个多线程下载
+    pool = Pool(6)  # 一次6下
+    if int(pages) > 2:
+        for page in range(1, int(pages) + 1):
+            # print(page)
+            pool.apply_async(image_down, args=(page, url, inp))
+    pool.close()
+    pool.join()
 
 def get_groups():  # 获得重要信息
     inp = input('输入明星名字全拼:')
@@ -84,26 +118,15 @@ def get_groups():  # 获得重要信息
         pages = html1.xpath(
             r"//div[@class='pages']//a/text()")  # 获得分页pages
         pages = pages[len(pages)-2]
-        # print(pages)
-        # for page in range(1, int(pages) + 1):
-        for page in range(0, 1):
-            url = 'http://www.win4000.com/mt/' + \
-                inp + '_' +str(page)+'.html'
-            print(url)
-            r = requests.get(url, headers)
-            r.encoding = 'utf-8' # 转换编码
-            if r.status_code != 404:
-                html2 = etree.HTML(r.text)
-                title_list = html2.xpath(
-                    r"//div[@class='w1180 clearfix']//div[@class='Left_bar']//div[@class='tab_box']//ul[@class='clearfix']/li//a/img/@title")  # 获得分页pages
-                print(title_list)
-                url_list = html2.xpath(
-                    r"//div[@class='w1180 clearfix']//div[@class='Left_bar']//div[@class='tab_box']//ul[@class='clearfix']/li//a/@href")  # 获得分页pages
-                print(url_list)
-            get_img(inp,title_list, url_list)
+        # print(pages,url)
+        pool_down(pages, url, inp)
     else:
         print('重新输入')
         get_groups()
+
+
+
+
 
 def main():
     get_groups()

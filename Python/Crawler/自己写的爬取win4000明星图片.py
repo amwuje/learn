@@ -20,9 +20,12 @@ logging.basicConfig(
 headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
 }  # 加入请求头
-url = 'http://www.win4000.com/'
-
-root = 'D://pydown//win4000//'
+headers = {
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
+}  # 加入请求头
+url = 'http://www.win4000.com/'  # 网站根地址
+interval = 0.1  # 爬取图片的间隔时间
+root = 'D://pydown//win4000//'  # 总路径
 if not os.path.exists(root):
     os.mkdir(root)
 
@@ -69,6 +72,7 @@ def get_img(inp,title_list, url_list):
                     imagr_url = src[0].replace('?down', '')
                     file_name = path + imagr_url.split('/')[-1]
                     get_down(imagr_url, file_name)
+                    time.sleep(interval)
 
 
 def get_groups():  # 获得重要信息

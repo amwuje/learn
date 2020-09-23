@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on 2020-09-11 23:00
-
+多线程
 @author: huang
 """
 import os

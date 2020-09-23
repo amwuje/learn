@@ -257,7 +257,7 @@ def parseStp():
 
 # parseStp()
 if __name__ == '__main__':
-    global writer
+    # global writer
     global path
     start1 = time.time()
     path = os.path.split(os.path.realpath(__file__))[0]  # 获取脚本所在目录

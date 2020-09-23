@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on 2020-09-11 23:00
-
+单线程
 @author: huang
 """
 import os
@@ -72,7 +72,7 @@ def get_img(inp,title_list, url_list):
                     imagr_url = src[0].replace('?down', '')
                     file_name = path + imagr_url.split('/')[-1]
                     get_down(imagr_url, file_name)
-                    time.sleep(interval)
+                    # time.sleep(interval)
 
 
 def get_groups():  # 获得重要信息
@@ -89,8 +89,8 @@ def get_groups():  # 获得重要信息
             r"//div[@class='pages']//a/text()")  # 获得分页pages
         pages = pages[len(pages)-2]
         # print(pages)
-        # for page in range(1, int(pages) + 1):
-        for page in range(0, 1):
+        for page in range(1, int(pages) + 1):
+        # for page in range(0, 1):
             url = 'http://www.win4000.com/mt/' + \
                 inp + '_' +str(page)+'.html'
             print(url)

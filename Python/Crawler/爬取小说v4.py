@@ -73,7 +73,7 @@ def get_down(text_url, file_name, path, txt_about, fid):
             print("文件已存在")
     except Exception as e:
             print("爬取失败:" + str(e))
-    if fid == 402:
+    if fid == 402 or fid == 385:
         print('正在下载：' + file_name)
         try:
             if not os.path.exists(path1):  # 判断文件是否存在，存在则进行提示
@@ -104,7 +104,7 @@ def get_txt(title_list, url_list, fid, title_path):
         r = session(title_url, fid)
         if r.status_code == 200:
             html1 = etree.HTML(r.text)
-            if fid == 402:
+            if fid == 402 or fid == 385:
                 url1 = html1.xpath(
                     r"//dl[@class='t_attachlist']//a/@href")  # 获得文件url
                 file_name = html1.xpath(
@@ -122,12 +122,21 @@ def get_txt(title_list, url_list, fid, title_path):
             item = "".join([l.replace("\n", "").replace(
                 "\t", "").replace("\r", "") for l in item])
             txt_about = item
-            # print(file_name)
+            # print(file_name)  for title, url in zip(title_list, url_list):
             if len(url1) != 0 and len(box_meassage) == 0:
-                text_url = url + url1[0]
-                file_name = file_name[0]
-                file_name = re.sub('[:?！!：？【】]', '', file_name) # 替换title中的特殊字符，避免建立文件出错
-                get_down(text_url, file_name, path, txt_about, fid)
+                if len(url1) > 1:
+                    for f, u in zip(file_name, url1):
+                        # f = str(f[0])
+                        # 替换title中的特殊字符，避免建立文件出错
+                        f = re.sub('[:?！!：？【】]', '', f)
+                        u = url + u
+                        # print(u, f)
+                        get_down(u, f, path, txt_about, fid)
+                else:
+                    text_url = url + url1[0]
+                    file_name = file_name[0]
+                    file_name = re.sub('[:?！!：？【】]', '', file_name) # 替换title中的特殊字符，避免建立文件出错
+                    get_down(text_url, file_name, path, txt_about, fid)
 
 
 def get_sis(title, url_title, fid):  # 获得重要信息
@@ -146,7 +155,7 @@ def get_sis(title, url_title, fid):  # 获得重要信息
         if len(box_meassage) != 1:
             pages = html1.xpath(
                 r"//div[@class='pages_btns']/div[@class='pages']//a/text()")  # 获得分页pages
-            print(pages)
+            # print(pages)
             if pages[len(pages)-1] != '››':
                 pages = pages[len(pages)-1]
             else:
@@ -166,10 +175,10 @@ def get_sis(title, url_title, fid):  # 获得重要信息
                         r"//div[@class='box message']/h1//text()")
                     if len(box_meassage) != 1:
                         title_list = html2.xpath(
-                            r"//tbody[contains(@id,'normalthread_')]//th[@class='hot']//span[contains(@id,'thread_')]//a/text()")  #
+                            r"//tbody[contains(@id,'normalthread_')]//span[contains(@id,'thread')]//a/text()")  #
                         # print(title_list)
                         url_list = html2.xpath(
-                            r"//tbody[contains(@id,'normalthread_')]//th[@class='hot']//span[contains(@id,'thread_')]//a/@href")  #
+                            r"//tbody[contains(@id,'normalthread_')]//span[contains(@id,'thread')]//a/@href")  #
                         # print(url_list)
                         # print(len(title_list),len(url_list))
                         get_txt(title_list, url_list, fid, path)
@@ -208,7 +217,7 @@ def get_groups(url):  # 获得重要信息
     begin_down(title, url_title)  # 把分组标题和分组网址回溯
 
 def session(url, fid):
-    if fid == 402:
+    if fid == 402 or fid == 385:
         cookies = cookies1
     else:
         cookies = cookies2

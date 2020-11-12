@@ -65,11 +65,13 @@ def get_img(url_list,path):
 
 
 # https: // www.mnmulu.com/photos/zhaoliying_list/
-def get_groups():  # 获得重要信息
-    inp = input('输入明星名字全拼:') 
-    inp1 = inp + "_list/"
+def get_groups(mx):  # 获得重要信息
+    # inp = input('输入明星名字全拼:') 
+    # inp1 = inp + "_list/"
+    inp1 = mx + "_list/"
     url1 = url + "photos/" + inp1
-    path = root + inp + "//"
+    # path = root + inp + "//"
+    path = root + mx + "//"
     # print(url1)
     r = requests.get(url1)
     r.encoding = 'utf-8'  # 转换编码
@@ -102,8 +104,17 @@ def get_groups():  # 获得重要信息
         print('重新输入')
         get_groups()
 
+
+def start():
+    mx = ['gaoyuanyuan', 'zhongxintong', 'huangshengyi',
+             'gulinaza', 'yangying', 'dilireba', 'tongliya', 
+             'tangyan', 'huangshengyi', 'songzuer', 'jujingyi',
+             'yangchaoyue', 'chenqiaoen']
+    for i in mx:
+        get_groups(i)
 def main():
-    get_groups()
+    get_groups('zhaoliying')
+    # start()
 
 
 if __name__ == '__main__':

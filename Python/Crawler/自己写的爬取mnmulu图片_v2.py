@@ -120,15 +120,13 @@ def get_groups(mx):  # 获得重要信息
 
 
 def start():
-    mx = ['gaoyuanyuan', 'zhongxintong', 'huangshengyi',
-             'gulinaza', 'yangying', 'dilireba', 'tongliya', 
-             'tangyan', 'huangshengyi', 'songzuer', 'jujingyi',
-             'yangchaoyue', 'chenqiaoen']
+    mx = ['qiaoxin', 'wuxuanyi']
     for i in mx:
         get_groups(i)
+
 def main():
-    get_groups('chengxiao')
-    # start()
+    # get_groups('chengxiao')
+    start()
 
 
 if __name__ == '__main__':
